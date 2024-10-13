@@ -183,6 +183,7 @@ End Function
 '
 ' Examples:
 '   2029-02-17T19:43:08 +01.00  -> 2029-02-17 19:43:08
+'   2029-02-17T19:43:08Z        -> 2029-02-17 19:43:08
 '   2029-02-17T19:43:08         -> 2029-02-17 19:43:08
 '   ' IgnoreMilliseconds = False
 '   2029-02-17T19:43:08.566     -> 2029-02-17 19:43:08.566
@@ -199,6 +200,8 @@ Public Function CDateIso8601( _
     Const Iso8601Separator  As String = "T"
     Const NeutralSeparator  As String = " "
 
+    Const Iso8601ZeroOffsetSymbol = "Z"
+
     ' Length of ISO 8601 date/time string like: 2029-02-17T19:43:08 [+00.00]
     Const Iso8601Length     As Integer = 19
     ' Length of ISO 8601 date/time string like: 2029-02-17T19:43:08.566
@@ -208,6 +211,7 @@ Public Function CDateIso8601( _
     Dim Result      As Date
     
     Value = Replace(Expression, Iso8601Separator, NeutralSeparator)
+    Value = Replace(Value, Iso8601ZeroOffsetSymbol, " [+00.00]")
     If InStr(Expression, MillisecondSeparator) <> Iso8601Length + 1 Then
         IgnoreMilliseconds = True
     End If
